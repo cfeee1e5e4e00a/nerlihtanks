@@ -9,8 +9,8 @@ Window_Size = [950, 750]
 IsWorking = True
 hero1_c = [950-80, 750-80]
 hero2_c = [0, 0]
-shoot1_c = [None, None]
-shoot2_c = [None, None]
+shoot1_c = [-1, -1]
+shoot2_c = [-1, -1]
 shoot1_v = None
 shoot2_v = None
 hero_speed = 0.75
@@ -57,7 +57,7 @@ while IsWorking:
             
         #Перехват нажатий
         if e.type == pygame.KEYDOWN:
-            print e.key
+            print(e.key)
             if e.key == pygame.K_UP:
                 IsUp[0] = True
                 IsDown[0] = False
@@ -172,64 +172,64 @@ while IsWorking:
     #Проверка попаданий
     if shoot1_c[0] < hero2_c[0] and shoot1_c[0] > hero2_c[0] - 40:
         if shoot1_c[1] > hero2_c[1] and shoot1_c[1] < hero2_c[1] + 40:
-            print 'popal blen'
+            print('popal blen')
             counter1 = counter1 + 1
             hero2_c = [0, 0]
-            shoot1_c = [None, None]
+            shoot1_c = [-1, -1]
 
     if shoot1_c[1] < hero2_c[1] and shoot1_c[1] > hero2_c[1] - 40:
         if shoot1_c[0] > hero2_c[0] and shoot1_c[0] < hero2_c[0] + 40:
-            print 'popal blen'
+            print('popal blen')
             counter2 = counter2 + 1
             hero1_c = [950, 750]
-            shoot1_c = [None, None]
+            shoot1_c = [-1, -1]
 
     if shoot2_c[0] < hero1_c[0] and shoot2_c[0] > hero1_c[0] - 40:
         if shoot2_c[1] > hero1_c[1] and shoot2_c[1] < hero1_c[1] + 40:
-            print 'popal blen'
+            print('popal blen')
             counter1 = counter1 + 1
             hero2_c = [0, 0]
-            shoot2_c = [None, None]
+            shoot2_c = [-1, -1]
 
     if shoot2_c[1] < hero1_c[1] and shoot2_c[1] > hero1_c[1] - 40:
         if shoot2_c[0] > hero1_c[0] and shoot2_c[0] < hero1_c[0] + 40:
-            print 'popal blen'
+            print('popal blen')
             counter2 = counter2 + 1
             hero1_c = [950, 750]
-            shoot2_c = [None, None]
+            shoot2_c = [-1, -1]
         
     #Перезарядка
     if shoot1_c[0] > 950:
-        shoot1_c = [None, None]
+        shoot1_c = [-1, -1]
         shoot1_v = None
         IsRedShooted = False
     if shoot1_c[0] < 0:
-        shoot1_c = [None, None]
+        shoot1_c = [-1, -1]
         shoot1_v = None
         IsRedShooted = False
     if shoot1_c[1] > 751:
-        shoot1_c = [None, None]
+        shoot1_c = [-1, -1]
         shoot1_v = None
         IsRedShooted = False
     if shoot1_c[1] < 0:
-        shoot1_c = [None, None]
+        shoot1_c = [-1, -1]
         shoot1_v = None
         IsRedShooted = False
 
     if shoot2_c[0] > 950:
-        shoot2_c = [None, None]
+        shoot2_c = [-1, -1]
         shoot2_v = None
         IsBlueShooted = False
     if shoot2_c[0] < 0:
-        shoot2_c = [None, None]
+        shoot2_c = [-1, -1]
         shoot2_v = None
         IsBlueShooted = False
     if shoot2_c[1] > 751:
-        shoot2_c = [None, None]
+        shoot2_c = [-1, -1]
         shoot2_v = None
         IsBlueShooted = False
     if shoot2_c[1] < 0:
-        shoot2_c = [None, None]
+        shoot2_c = [-1, -1]
         shoot2_v = None
         IsBlueShooted = False
         
@@ -262,7 +262,7 @@ while IsWorking:
     screen.blit(WhatDraw2, [int(hero2_c[0]), int(hero2_c[1])])
     
     #Проверка выстрела
-    if shoot2_c[1] != None:
+    if shoot2_c[1] != -1:
         if shoot2_v == hero2_up:
             shoot2_c[1] = shoot2_c[1] - 5
             screen.blit(shoot_blue, [shoot2_c[0]+36, shoot2_c[1]])
@@ -276,7 +276,7 @@ while IsWorking:
             shoot2_c[0] = shoot2_c[0] + 5
             screen.blit(shoot_blue, [shoot2_c[0], shoot2_c[1]+36])
             
-    if shoot1_c[1] != None:
+    if shoot1_c[1] != -1:
         if shoot1_v == hero1_up:
             shoot1_c[1] = shoot1_c[1] - 5
             screen.blit(shoot_red, [shoot1_c[0]+36, shoot1_c[1]])
