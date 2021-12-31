@@ -2,7 +2,28 @@
 import pygame #     I IIIII IIIII IIIII IIIII IIIII
 pygame.init() #     I I I I IIIII I   I IIIII   I
 import time   #     I I I I I     I   I I I     I
-              #     I I I I I     IIIII I  I    I
+import browser#     I I I I I     IIIII I  I    I
+import dataclasses
+
+
+
+
+events = []
+
+
+def setup_events():
+    def on_down(e):
+        # browser.console.dir(e)
+        # print(e.keyCode)
+        if not e.repeat:
+            events.append(pygame.event.Event(pygame.KEYDOWN, key=e.keyCode))
+    def on_up(e):
+        events.append(pygame.event.Event(pygame.KEYUP, key=e.keyCode))
+    browser.document.onkeydown = on_down
+    browser.document.onkeyup = on_up
+
+setup_events()
+
 
 #Обьявления переменных
 Window_Size = [950, 750]
@@ -31,7 +52,7 @@ counter2 = 0
 #Hero2 = blue
 screen = pygame.display.set_mode(Window_Size)
 pygame.display.set_caption("Tank's")
-font = pygame.font.SysFont("Trebuchet MS", 52)
+font = pygame.font.Font(pygame.font.get_default_font(), 10)
 background = pygame.image.load("texture/pole.png").convert_alpha()
 shoot_blue = pygame.image.load("texture/shoot blue.png").convert_alpha()
 shoot_red = pygame.image.load("texture/shoot red.png").convert_alpha()
@@ -49,63 +70,64 @@ WhatDraw1 = hero1_up
 WhatDraw2 = hero2_up
 
 #Главный Цикл
-while IsWorking:
+def iteration():
+    locals().update(globals())
     #Проверка выхода из игры
-    for e in pygame.event.get():
+    for e in events:
         if e.type == pygame.QUIT:
             IsWorking = False
             
         #Перехват нажатий
         if e.type == pygame.KEYDOWN:
             print(e.key)
-            if e.key == pygame.K_UP:
+            if e.key == 38:
                 IsUp[0] = True
                 IsDown[0] = False
                 IsLeft[0] = False
                 IsRight[0] = False
-            elif e.key == pygame.K_DOWN:
+            elif e.key == 40:
                 IsDown[0] = True
                 IsUp[0] = False
                 IsLeft[0] = False
                 IsRight[0] = False
-            elif e.key == pygame.K_LEFT:
+            elif e.key == 37:
                 IsLeft[0] = True
                 IsUp[0] = False
                 IsDown[0] = False
                 IsRight[0] = False
-            elif e.key == pygame.K_RIGHT:
+            elif e.key == 39:
                 IsRight[0] = True
                 IsUp[0] = False
                 IsDown[0] = False
                 IsLeft[0] = False
                 
-            elif e.key == 119:
+            elif e.key == 87:
                 IsUp[1] = True
                 IsDown[1] = False
                 IsLeft[1] = False
                 IsRight[1] = False
-            elif e.key == 115:
+            elif e.key == 83:
                 IsDown[1] = True
                 IsUp[1] = False
                 IsLeft[1] = False
                 IsRight[1] = False
-            elif e.key == 97:
+            elif e.key == 65:
                 IsUp[1] = False
                 IsDown[1] = False
                 IsRight[1] = False
                 IsLeft[1] = True
-            elif e.key == 100:
+            elif e.key == 68:
                 IsRight[1] = True
                 IsUp[1] = False
                 IsDown[1] = False
                 IsLeft[1] = False
-            elif e.key == 113:
+            elif e.key == 81:
                 if IsBlueShooted != True:
                     IsBlueShooted = True
                     shoot2_c = list(hero2_c)
                     shoot2_v = WhatDraw2
 
-            elif e.key == 47:
+            elif e.key == 191:
                 if IsRedShooted != True:
                     IsRedShooted = True
                     shoot1_c = list(hero1_c)
@@ -113,24 +135,24 @@ while IsWorking:
                 
                 
         elif e.type == pygame.KEYUP:
-            if e.key == pygame.K_UP:
+            if e.key == 38:
                 IsUp[0] = False
-            elif e.key == pygame.K_DOWN:
+            elif e.key == 40:
                 IsDown[0] = False
-            elif e.key == pygame.K_LEFT:
+            elif e.key == 37:
                 IsLeft[0] = False
-            elif e.key == pygame.K_RIGHT:
+            elif e.key == 39:
                 IsRight[0] = False
                 
-            elif e.key == 119:
+            elif e.key == 87:
                 IsUp[1] = False
-            elif e.key == 115:
+            elif e.key == 83:
                 IsDown[1] = False
-            elif e.key == 97:
+            elif e.key == 65:
                 IsLeft[1] = False
-            elif e.key == 100:
+            elif e.key == 68:
                 IsRight[1] = False
-                
+    events.clear()
     #Перемещение игроков           
     if IsUp[0] == True:
         hero1_c[1] = hero1_c[1] - hero_speed
@@ -252,9 +274,11 @@ while IsWorking:
     if IsRight[1] == True:
        WhatDraw2 = hero2_right
 
+    # TODO: fix counter rendering
     text1 = font.render(str(counter1), 1, [0, 0, 255])
     text2 = font.render(str(counter2), 1, [255, 0, 0])
 
+    screen.fill((255, 255, 255))
     screen.blit(background, [0, 0])
     screen.blit(text1, [150, 100])
     screen.blit(text2, [750, 100])
@@ -294,7 +318,9 @@ while IsWorking:
     pygame.display.flip()
 
     #Ожидание для ФПС
-    #time.sleep(0.003)
+    globals().update(locals())
+    browser.timer.set_timeout(iteration, 0.03)
 
-#Выход из игры
-pygame.quit()
+iteration()
+# Выход из игры
+# pygame.quit()
